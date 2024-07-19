@@ -1,0 +1,538 @@
+<!--
+    Team members: Divya,Reuben,Ashita,Sarthak,Depashri
+    Purpose: The purpose of this file is to display a list of cars with their details,
+     provide a search/filter functionality, and allow users to update car information.
+     It also includes navigation, styling, and JavaScript code for star ratings and form interactions.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Cars</title>
+    <!-- CSS styles -->
+    <style>
+        /* Base styles for the body */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        /* Container for the cards */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        /* Navigation bar styles */
+        .navbar {
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        /* Branding style */
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: black;
+            margin: 0 auto;
+        }
+
+        /* Navigation links styles */
+        .navbar-nav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        /* Individual navigation item styles */
+        .nav-item {
+            margin-left: 20px;
+        }
+
+        /* Styles for navigation links */
+        .nav-link {
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        /* Hover style for navigation links */
+        .nav-link:hover {
+            color: #e66565b8;
+        }
+
+        /* Button to toggle the form visibility */
+        .btn-toggle-form {
+            padding: 10px 20px;
+            background-color: #e66565b8;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: auto;
+        }
+
+        .btn-toggle-form:hover {
+            background-color: #e66565b8;
+        }
+
+        /* Card styles */
+        .card {
+            width: calc(33.33% - 20px);
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        /* Card header styles */
+        .card-header {
+            padding: 20px;
+            background-color: #e66565b8;
+            color: #fff;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        /* Card content styles */
+        .card-content {
+            padding: 20px;
+            height: 320px;
+        }
+
+        /* Card content paragraph styles */
+        .card-content p {
+            margin: 5px 0;
+        }
+
+        /* Card footer styles */
+        .card-footer {
+            display: flex;
+            justify-content: space-around;
+            align-items: baseline;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 10px 20px;
+            background-color: #e66565b8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #e66565b8;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media screen and (max-width: 480px) {
+            .card {
+                width: 100%;
+            }
+
+            .card-footer {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .filter {
+                margin-top: 10px;
+                margin-left: 10px;
+            }
+        }
+
+        /* Form styles */
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        /* Label styles */
+        form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Input field styles */
+        form input[type="text"],
+        form input[type="number"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        /* Button styles within form */
+        form button {
+            padding: 10px;
+            background-color: #e66565b8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Styles for star ratings */
+        .stars {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        /* Individual star styles */
+        .stars span {
+            cursor: pointer;
+            font-size: 24px;
+            color: #ffd700;
+        }
+
+        /* Form container styles */
+        .form-container {
+            width: 50%;
+            margin-left: 118px;
+            display: none;
+        }
+
+        /* Logo styles */
+        .navbar-logo {
+            width: 126px;
+            height: 58px;
+            margin-right: 10px;
+        }
+
+        .overflow {
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* Responsive styles for smaller screens */
+        @media screen and (max-width: 768px) {
+            .form-container {
+                width: 90%;
+                margin: 0 auto;
+                display: none;
+            }
+
+            .navbar {
+                width: 100%;
+            }
+
+            .filter {
+                margin-top: 10px;
+                margin-left: 3px;
+            }
+
+            .card {
+                width: calc(50% - 20px);
+            }
+
+            .card-footer {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!-- Navigation bar -->
+<div class="navbar">
+    <!-- Logo -->
+    <img
+            src="https://66098c689a3fbb94531d49cb--peppy-begonia-317bdb.netlify.app/assets/logo.jpg"
+            alt="Logo"
+            class="navbar-logo"
+    />
+    <!-- Branding -->
+    <h1 class="navbar-brand">Auto View</h1>
+    <!-- Navigation links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a href="/app/home" class="nav-link">Home</a>
+        </li>
+        <% if (accessLevel && accessLevel === 'admin') { %>
+            <li class="nav-item">
+                <a href="/app/manage" class="nav-link">Admin Page</a>
+            </li>
+        <% } %>
+        <li class="nav-item">
+            <a href="/about" class="nav-link">About Us</a>
+        </li>
+        <li class="nav-item">
+            <a href="/logout" class="nav-link">Logout</a>
+        </li>
+    </ul>
+</div>
+<!-- Search bar -->
+<div class="filter"><%- include('partials/searchBar'); %></div>
+<!-- Container for car cards -->
+<div class="container">
+    <!-- Loop through cars and display each as a card -->
+    <% cars.forEach(car=> { %>
+        <div class="card">
+            <!-- Card header with make and model -->
+            <div class="card-header"><%= car.make %>(<%= car.model %>)</div>
+            <!-- Card content with details -->
+            <div class="card-content">
+                <p>Year: <%= car.year %></p>
+                <p>Price: <%= car.price %></p>
+                <p>Color: <%= car.color %></p>
+                <p>VIN: <%= car.vin %></p>
+                <p>Fuel Type: <%= car.fuelType %></p>
+                <p>Transmission: <%= car.transmission %></p>
+                <p>Mileage: <%= car.mileage %></p>
+                <p>Engine Type: <%= car.engineType %></p>
+                <p class="overflow">ID: <%= car._id %></p>
+                <!-- Display car image -->
+                <img src="/<%= car.imgPath %>" alt="car image" width="128px" />
+            </div>
+            <!-- Card footer with star ratings and update button -->
+            <div class="card-footer">
+                <div class="stars" id="stars_<%= car._id %>">
+                    <% for(let i=1; i <=5; i++) { %>
+                        <span class="star" data-value="<%= i %>">☆</span>
+                    <% } %>
+                </div>
+                <button class="btn" id="updateButton">Update</button>
+            </div>
+        </div>
+    <% }) %>
+</div>
+<!-- Form container for updating cars -->
+<div class="form-container">
+    <h2>Update a Car</h2>
+    <!-- Update car form -->
+    <form
+            action="/app/updatecar"
+            method="POST"
+            enctype="multipart/form-data"
+            id="updateForm"
+    >
+        <input type="hidden" id="_id" name="_id" required />
+        <label for="make">Make:</label>
+        <input type="text" id="make" name="make" placeholder="Make" required />
+
+        <label for="model">Model:</label>
+        <input
+                type="text"
+                id="model"
+                name="model"
+                placeholder="Model"
+                required
+        />
+
+        <label for="year">Year:</label>
+        <input
+                type="number"
+                id="year"
+                name="year"
+                placeholder="Year"
+                required
+        />
+
+        <label for="price">Price:</label>
+        <input
+                type="number"
+                id="price"
+                name="price"
+                placeholder="Price"
+                required
+        />
+
+        <label for="color">Color:</label>
+        <input
+                type="text"
+                id="color"
+                name="color"
+                placeholder="Color"
+                required
+        />
+
+        <label for="vin">VIN:</label>
+        <input type="text" id="vin" name="vin" placeholder="VIN" required />
+
+        <label for="fuelType">Fuel Type:</label>
+        <input
+                type="text"
+                id="fuelType"
+                name="fuelType"
+                placeholder="Fuel Type"
+        />
+
+        <label for="transmission">Transmission:</label>
+        <input
+                type="text"
+                id="transmission"
+                name="transmission"
+                placeholder="Transmission"
+        />
+
+        <label for="mileage">Mileage:</label>
+        <input
+                type="number"
+                id="mileage"
+                name="mileage"
+                placeholder="Mileage"
+        />
+
+        <label for="engineType">Engine Type:</label>
+        <input
+                type="text"
+                id="engineType"
+                name="engineType"
+                placeholder="Engine Type"
+        />
+        <input
+                type="file"
+                id="carImg"
+                name="carImg"
+                accept="image/png, image/jpeg"
+        />
+        <button type="submit">Update Car</button>
+    </form>
+</div>
+<!-- JavaScript code -->
+<script>
+    // JavaScript code for star rating
+    document.querySelectorAll(".stars").forEach((starsContainer) => {
+        const stars = starsContainer.querySelectorAll(".star");
+        let rating = 0; // Initial rating
+
+        stars.forEach((star) => {
+            star.addEventListener("mouseover", function () {
+                const value = parseInt(this.getAttribute("data-value"));
+                highlightStars(value);
+            });
+
+            star.addEventListener("click", function () {
+                rating = parseInt(this.getAttribute("data-value"));
+                highlightStars(rating);
+                // You can send the rating to the server for updating the car's rating
+                console.log("Rating:", rating);
+            });
+
+            star.addEventListener("mouseleave", function () {
+                highlightStars(rating);
+            });
+        });
+
+        function highlightStars(value) {
+            stars.forEach((star) => {
+                const starValue = parseInt(star.getAttribute("data-value"));
+                star.textContent = starValue <= value ? "★" : "☆";
+            });
+        }
+    });
+
+    // JavaScript code to toggle form container visibility and populate form fields
+    document.addEventListener("DOMContentLoaded", function () {
+        const updateButtons = document.querySelectorAll(
+            '.btn[id="updateButton"]'
+        );
+        const formContainer = document.querySelector(".form-container");
+        const form = document.querySelector("#updateForm");
+
+        updateButtons.forEach((updateButton) => {
+            updateButton.addEventListener("click", function () {
+                // Toggle the visibility of the form container
+                formContainer.style.display = "block";
+
+                // Get the card containing the update button
+                const card = this.closest(".card");
+
+                // Retrieve car information from the card
+                const make = card
+                    .querySelector(".card-header")
+                    .textContent.split("(")[0]
+                    .trim();
+                const model = card
+                    .querySelector(".card-header")
+                    .textContent.split("(")[1]
+                    .replace(")", "")
+                    .trim();
+                const year = card
+                    .querySelector(".card-content p:nth-child(1)")
+                    .textContent.split(": ")[1]
+                    .trim();
+                const price = card
+                    .querySelector(".card-content p:nth-child(2)")
+                    .textContent.split(": ")[1]
+                    .trim();
+                const color = card
+                    .querySelector(".card-content p:nth-child(3)")
+                    .textContent.split(": ")[1]
+                    .trim();
+                const vin = card
+                    .querySelector(".card-content p:nth-child(4)")
+                    .textContent.split(": ")[1]
+                    .trim();
+                const fuelType = card
+                    .querySelector(".card-content p:nth-child(5)")
+                    .textContent.split(": ")[1]
+                    .trim();
+                const transmission = card
+                    .querySelector(".card-content p:nth-child(6)")
+                    .textContent.split(": ")[1]
+                    .trim();
+                const mileage = card
+                    .querySelector(".card-content p:nth-child(7)")
+                    .textContent.split(": ")[1]
+                    .trim();
+                const engineType = card
+                    .querySelector(".card-content p:nth-child(8)")
+                    .textContent.split(": ")[1]
+                    .trim();
+                const carid = card
+                    .querySelector(".card-content p:nth-child(9)")
+                    .textContent.split(": ")[1]
+                    .trim();
+
+                // Set the form fields with the retrieved information
+                form.make.value = make;
+                form.model.value = model;
+                form.year.value = year;
+                form.price.value = price;
+                form.color.value = color;
+                form.vin.value = vin;
+                form.fuelType.value = fuelType;
+                form.transmission.value = transmission;
+                form.mileage.value = mileage;
+                form.engineType.value = engineType;
+                form._id.value = carid;
+            });
+        });
+    });
+</script>
+</body>
+</html>

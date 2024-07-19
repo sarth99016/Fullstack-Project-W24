@@ -1,0 +1,101 @@
+<!--
+    Team members: Divya,Reuben,Ashita,Sarthak,Depashri
+    Purpose:This page serves as a search form for filtering cars. Users can input details
+like make, model, color, year, fuel type, transmission, engine type, minimum mileage,
+and price range to refine their search.Upon submission, the server processes the data and returns a list of matching cars.
+-->
+
+<div>
+    <!-- Form for searching cars -->
+    <form action="/app/search" method="get" id="searchForm">
+        <table>
+            <tr>
+                <!-- Input field for Make -->
+                <td>
+                    <label for="make">Make:
+                        <input type="text" placeholder="Make" id="make" name="make" value="<%= params.make %>" />
+                    </label>
+                </td>
+                <!-- Input field for Model -->
+                <td>
+                    <label for="model">Model:
+                        <input type="text" placeholder="Model" id="model" name="model" value="<%= params.model %>" />
+                    </label>
+                </td>
+                <!-- Input field for Color -->
+                <td>
+                    <label for="color">Color:
+                        <input type="text" placeholder="Color" id="color" name="color" value="<%= params.color %>" />
+                    </label>
+                </td>
+                <!-- Input field for Minimum Year -->
+                <td>
+                    <label for="fromYear">Minimum year:
+                        <input type="number" min="2015" max="2024" placeholder="Eg: 2015" id="fromYear" name="fromYear"
+                               value="<%= params.fromYear %>" />
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <!-- Input field for Fuel Type -->
+                <td>
+                    <label for="fuelType">Fuel Type:
+                        <input type="text" placeholder="Fuel Type" id="fuelType" name="fuelType"
+                               value="<%= params.fuelType %>" />
+                    </label>
+                </td>
+                <!-- Input field for Transmission -->
+                <td>
+                    <label for="transmission">Transmission:
+                        <input type="text" placeholder="Transmission" id="transmission" name="transmission"
+                               value="<%= params.transmission %>" />
+                    </label>
+                </td>
+                <!-- Input field for Engine Type -->
+                <td>
+                    <label for="engineType">Engine type:
+                        <input type="text" placeholder="Engine type" id="engineType" name="engineType"
+                               value="<%= params.engineType %>" />
+                    </label>
+                </td>
+                <!-- Input field for Minimum Mileage -->
+                <td>
+                    <label for="fromMileage">Minimum mileage:
+                        <input type="number" min="5" max="50" placeholder="Eg: 10" id="fromMileage" name="fromMileage"
+                               value="<%= params.fromMileage %>" />
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <!-- Input field for Minimum Price -->
+                <td>
+                    <label for="fromPrice">Minimum price:
+                        <input type="number" min="0" max="999999" placeholder="Eg: 1000" id="fromPrice" name="fromPrice"
+                               value="<%= params.fromPrice %>" />
+                    </label>
+                </td>
+                <!-- Input field for Maximum Price -->
+                <td>
+                    <label for="toPrice">Maximum price:
+                        <input type="number" max="999999" placeholder="Eg: 5000" id="toPrice" name="toPrice"
+                               value="<%= params.toPrice %>" />
+                    </label>
+                </td>
+                <!-- Empty cell for alignment -->
+                <td></td>
+                <!-- Submit button for filtering cars -->
+                <td>
+                    <input type="submit" value="Filter cars" style="
+              padding: 10px 20px;
+              background-color: #e66565b8;
+              color: #fff;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 16px;
+            " />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

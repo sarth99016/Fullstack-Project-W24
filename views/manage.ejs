@@ -1,0 +1,545 @@
+<!--
+    Team members: Divya, Reuben, Ashita, Sarthak, Depashri
+    Purpose: Car dealership management interface for adding, deleting, and viewing cars. Includes a responsive layout with navbar, table, and forms. JavaScript enables table sorting and modal display for viewing car details.
+-->
+
+
+<head>
+    <!-- Meta tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Management</title>
+    <!-- CSS styles -->
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* Form styles */
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"],
+        form input[type="number"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #e66565b8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #e66565b8;
+            color: #fff;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .sort-icon {
+            position: absolute;
+            top: 50%;
+            right: 5px;
+            transform: translateY(-50%);
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Button styles */
+        .btn {
+            padding: 10px 20px;
+            background-color: #e66565b8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #e66565b8;
+        }
+
+
+        .table-container {
+            margin-top: 10px;
+            background-color: #fff;
+            overflow-x: auto;
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 768px) {
+            /* Styles for smaller screens */
+            /* Navbar styles */
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+
+            .navbar-logo {
+                margin: 0;
+                margin-bottom: 10px;
+            }
+
+            .navbar-brand {
+                margin: 0;
+                margin-bottom: 10px;
+            }
+
+            .navbar-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-item {
+                margin: 5px 0;
+            }
+
+            .nav-link {
+                margin: 0;
+            }
+
+            /* Form input styles */
+            form input[type="text"],
+            form input[type="number"] {
+                width: 100%;
+            }
+
+            /* Table styles */
+            .table-container {
+                overflow-x: auto;
+            }
+
+            table {
+                width: 100%;
+            }
+
+            th,
+            td {
+                white-space: nowrap;
+            }
+        }
+
+        /* Other styles */
+        /* Navbar logo */
+        .navbar-logo {
+            width: 126px;
+            height: 58px;
+            margin-right: 10px;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .navbar-brand {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: black;
+            margin: 0 auto;
+        }
+
+        .navbar-nav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .nav-item {
+            margin-left: 20px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333333;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #e66565b8;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        h3 {
+            color: #e66565b8;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Select element styles */
+        form select {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        form select option {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        form select:focus {
+            outline: none;
+            border-color: #e66565b8;
+        }
+
+        form select:hover {
+            border-color: #e66565b8;
+        }
+
+        /* Upload button styles */
+        .upload {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Navbar -->
+<div class="navbar">
+    <img src="https://66098c689a3fbb94531d49cb--peppy-begonia-317bdb.netlify.app/assets/logo.jpg" alt="Logo"
+         class="navbar-logo" />
+    <h1 class="navbar-brand">Exclusive Operations</h1>
+    <ul class="navbar-nav">
+        <!-- Navigation links -->
+        <li class="nav-item">
+            <a href="/app/home" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+            <a href="/app/display" class="nav-link">User Page</a>
+        </li>
+        <li class="nav-item">
+            <a href="/about" class="nav-link">About Us</a>
+        </li>
+        <li class="nav-item">
+            <a href="/logout" class="nav-link">Logout</a>
+        </li>
+    </ul>
+</div>
+
+<div class="container">
+    <!-- Table container -->
+    <div class="table-container">
+        <!-- Form for deleting cars -->
+        <form id="deleteForm" action="/app/deletecar" method="post">
+            <table>
+                <thead>
+                <!-- Table headers -->
+                <tr>
+                    <th>select</th>
+                    <th onclick="sortTable(1)">
+                        Make <span id="makeIcon" class="sort-icon">▲</span>
+                    </th>
+                    <th onclick="sortTable(2)">
+                        Model <span id="modelIcon" class="sort-icon">▲</span>
+                    </th>
+                    <!-- Other table headers -->
+                    <th>Year</th>
+                    <th>Price</th>
+                    <th>Color</th>
+                    <th>VIN</th>
+                    <th>Fuel Type</th>
+                    <th>Transmission</th>
+                    <th>Mileage</th>
+                    <th>Engine Type</th>
+                    <th>Status</th>
+                    <th>Image</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Table body -->
+                <% cars.forEach(car=> { %>
+                    <tr>
+                        <td>
+                            <!-- Checkbox for selecting cars -->
+                            <input type="checkbox" name="selectedCars" value="<%= car._id %>" />
+                        </td>
+                        <!-- Table cells containing car details -->
+                        <td>
+                            <%= car.make %>
+                        </td>
+                        <td>
+                            <%= car.model %>
+                        </td>
+                        <td>
+                            <%= car.year %>
+                        </td>
+                        <td>
+                            <%= car.price %>
+                        </td>
+                        <td>
+                            <%= car.color %>
+                        </td>
+                        <td>
+                            <%= car.vin %>
+                        </td>
+                        <td>
+                            <%= car.fuelType %>
+                        </td>
+                        <td>
+                            <%= car.transmission %>
+                        </td>
+                        <td>
+                            <%= car.mileage %>
+                        </td>
+                        <td>
+                            <%= car.engineType %>
+                        </td>
+                        <!-- Cell for car status -->
+                        <td>
+                            <%= car.status %>
+                        </td>
+                        <!-- Cell for car image -->
+                        <td><img src="/<%= car.imgPath %>" alt="car image" width="64px" /></td>
+                    </tr>
+                <% }) %>
+                </tbody>
+            </table>
+            <!-- Buttons for deleting and viewing selected cars -->
+            <input type="submit" value="Delete Selected Cars" class="btn" />
+            <input type="submit" value="View Selected Cars" class="btn btn-view" />
+        </form>
+    </div>
+    <!-- Modal for displaying selected car details -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="selectedCarDetails"></div>
+        </div>
+    </div>
+    <!-- Form for adding a new car -->
+    <div class="form-container">
+        <h2>Add a Car</h2>
+        <form action="/app/addcar" method="POST" enctype="multipart/form-data">
+            <label for="make">Make:</label>
+            <input type="text" id="make" name="make" placeholder="Make" required />
+
+            <label for="model">Model:</label>
+            <input type="text" id="model" name="model" placeholder="Model" required />
+
+            <label for="year">Year:</label>
+            <input type="number" min="2000" id="year" name="year" placeholder="Year" required />
+
+            <label for="price">Price:</label>
+            <input type="number" min="0" id="price" name="price" placeholder="Price" required />
+
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color" placeholder="Color" required />
+
+            <label for="vin">VIN:</label>
+            <input type="text" id="vin" name="vin" placeholder="VIN" required />
+
+            <label for="fuelType">Fuel Type:</label>
+            <input type="text" id="fuelType" name="fuelType" placeholder="Fuel Type" />
+
+            <label for="transmission">Transmission:</label>
+            <input type="text" id="transmission" name="transmission" placeholder="Transmission" />
+
+            <label for="mileage">Mileage:</label>
+            <input type="number" min="0" id="mileage" name="mileage" placeholder="Mileage" />
+
+            <label for="engineType">Engine Type:</label>
+            <input type="text" id="engineType" name="engineType" placeholder="Engine Type" />
+            <!-- Inside the form -->
+            <label for="status">Status:</label>
+            <select id="status" name="status" required>
+                <option value="pending">Pending</option>
+                <option value="sold">Sold</option>
+                <option value="available">Available</option>
+            </select>
+
+            <input class="upload" type="file" id="carImg" name="carImg" accept="image/png, image/jpeg" />
+
+            <button type="submit">Add Car</button>
+        </form>
+    </div>
+</div>
+
+</body>
+
+<!-- JavaScript code for sorting table and handling modal -->
+<script>
+    // Sorting variables
+    let makeAsc = false;
+    let modelAsc = false;
+
+    // Function to sort the table by a specific column
+    function sortTable(colIndex) {
+        const table = document.querySelector("table");
+        const tbody = table.querySelector("tbody");
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+
+        // Sorting logic based on column index
+        if (colIndex === 1) {
+            rows.sort((a, b) => {
+                const aMake = a.cells[colIndex].textContent.trim().toLowerCase();
+                const bMake = b.cells[colIndex].textContent.trim().toLowerCase();
+                return makeAsc ? aMake.localeCompare(bMake) : bMake.localeCompare(aMake);
+            });
+            makeAsc = !makeAsc;
+            updateSortIcon("makeIcon", makeAsc);
+        } else if (colIndex === 2) {
+            rows.sort((a, b) => {
+                const aModel = a.cells[colIndex].textContent.trim().toLowerCase();
+                const bModel = b.cells[colIndex].textContent.trim().toLowerCase();
+                return modelAsc ? aModel.localeCompare(bModel) : bModel.localeCompare(aModel);
+            });
+            modelAsc = !modelAsc;
+            updateSortIcon("modelIcon", modelAsc);
+        }
+
+        // Reorder table rows
+        tbody.innerHTML = "";
+        rows.forEach((row) => tbody.appendChild(row));
+    }
+
+    // Function to update sort icon
+    function updateSortIcon(iconId, asc) {
+        const icon = document.getElementById(iconId);
+        icon.innerHTML = asc ? "▲" : "▼";
+    }
+
+    // Function to handle click event on "View Selected Cars" button
+    document.querySelector(".btn-view").addEventListener("click", function (e) {
+        e.preventDefault(); // Prevent the form submission
+
+        // Get all the selected car checkboxes
+        const selectedCars = document.querySelectorAll('input[name="selectedCars"]:checked');
+
+        // Initialize a variable to hold the HTML for selected car details
+        let selectedCarDetailsHTML = "";
+
+        // Loop through each selected car checkbox
+        selectedCars.forEach(function (car) {
+            // Get the parent row of the checkbox (which contains all the car details)
+            const carRow = car.closest("tr");
+
+            // Create HTML markup for the selected car details
+            selectedCarDetailsHTML += `
+        <h3>Car Details <span>(${carRow.cells[11].textContent})</span></h3>
+        <p>Make: ${carRow.cells[1].textContent}</p>
+        <p>Model: ${carRow.cells[2].textContent}</p>
+        <p>Year: ${carRow.cells[3].textContent}</p>
+        <p>Price: ${carRow.cells[4].textContent}</p>
+        <p>Color: ${carRow.cells[5].textContent}</p>
+        <p>VIN: ${carRow.cells[6].textContent}</p>
+        <p>Fuel Type: ${carRow.cells[7].textContent}</p>
+        <p>Transmission: ${carRow.cells[8].textContent}</p>
+        <p>Mileage: ${carRow.cells[9].textContent}</p>
+        <p>Engine Type: ${carRow.cells[10].textContent}</p>
+      `;
+        });
+
+        // Populate the modal with the selected car details
+        document.getElementById("selectedCarDetails").innerHTML = selectedCarDetailsHTML;
+
+        // Display the modal
+        document.getElementById("modal").style.display = "block";
+    });
+
+    // Function to close the modal
+    function closeModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+</script>
+
+</html>

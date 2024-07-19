@@ -1,0 +1,211 @@
+<!--
+    Team members: Divya, Reuben, Ashita, Sarthak, Depashri
+    Purpose: This HTML file serves as a registration and login page for the "Motor Sight" system.
+     It allows users to register for a new account with a username, password, and
+      role selection (admin or user). Existing users can also log in using their credentials.
+       The page includes JavaScript functionality to toggle between the registration and
+       login forms, providing a smooth user experience.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motor Sight</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .form-container {
+            flex: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Form Styles */
+        form {
+            padding: 20px;
+            border-radius: 8px;
+            color: black;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: auto;
+            /* Center the form on larger screens */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            background: #f2f3f7;
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        select {
+            appearance: none;
+        }
+
+        button[type="submit"],
+        #loginButton,
+        #goBackButton {
+            padding: 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 80;
+            /* Full width on smaller screens */
+        }
+
+        button[type="submit"] {
+            background-color: #5e8dc2;
+            color: #fff;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        #loginButton,
+        #goBackButton {
+            background-color: #e66565b8;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        #loginButton:hover,
+        #goBackButton:hover {
+            background-color: #9f5858b8;
+        }
+
+        @media screen and (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+
+            .abc {
+                flex: 5;
+            }
+
+            .form-container {
+                flex: 5;
+                object-fit: cover;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <img
+            class="abc"
+            src="https://66098c689a3fbb94531d49cb--peppy-begonia-317bdb.netlify.app/assets/login.jpg"
+    />
+    <div class="form-container">
+        <div>
+            <h1>Motor Sight</h1>
+            <p>
+                Please register to access the system or login if you already have an
+                account.
+            </p>
+            <span style="color: red"> <%= message %> </span>
+            <form action="/register" method="POST">
+                <h2>Register</h2>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required />
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required />
+                <label for="role">Role:</label>
+                <select id="role" name="role">
+                    <option value="admin" selected>Admin</option>
+                    <option value="user">User</option>
+                </select>
+                <button type="submit">Register</button>
+            </form>
+            <button id="loginButton">Already have an account? Login</button>
+            <button id="goBackButton" style="display: none">Go back</button>
+            <!-- Button to open login form -->
+            <form
+                    action="/login"
+                    method="POST"
+                    class="login-form"
+                    style="display: none"
+            >
+                <h2>Login</h2>
+                <label for="loginUsername">Username:</label>
+                <input type="text" id="loginUsername" name="username" required />
+                <label for="loginPassword">Password:</label>
+                <input
+                        type="password"
+                        id="loginPassword"
+                        name="password"
+                        required
+                />
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript to toggle visibility of login form and show "Go back" button
+    document
+        .getElementById("loginButton")
+        .addEventListener("click", function () {
+            var loginForm = document.querySelector(".login-form");
+            var registerForm = document.querySelector("form[action='/register']");
+            var goBackButton = document.getElementById("goBackButton");
+
+            if (loginForm.style.display === "none") {
+                loginForm.style.display = "block";
+                registerForm.style.display = "none";
+                goBackButton.style.display = "inline-block";
+                document.getElementById("loginButton").style.display = "none";
+            } else {
+                loginForm.style.display = "none";
+                registerForm.style.display = "block";
+                goBackButton.style.display = "none";
+                document.getElementById("loginButton").style.display =
+                    "inline-block";
+            }
+        });
+
+    // JavaScript to go back to initial state
+    document
+        .getElementById("goBackButton")
+        .addEventListener("click", function () {
+            var loginForm = document.querySelector(".login-form");
+            var registerForm = document.querySelector("form[action='/register']");
+            var goBackButton = document.getElementById("goBackButton");
+
+            loginForm.style.display = "none";
+            registerForm.style.display = "block";
+            goBackButton.style.display = "none";
+            document.getElementById("loginButton").style.display = "inline-block";
+        });
+</script>
+</body>
+</html>
